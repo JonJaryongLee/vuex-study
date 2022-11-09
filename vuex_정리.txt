@@ -1,0 +1,40 @@
+vuex 요약
+
+{{ $store.state.message }}
+근데 이렇게 하지 말고,
+computed 에 message() 정의해뒀다가
+{{ message }}
+message() {
+	return this.$store.state.message;
+}
+이런 식으로 사용하셈
+
+Actions 	
+	Mutations 와는 다르게, 비동기작업 가능
+	state 직접 변경 안하고, commit() 으로 변경
+	이 말은, Actions 에선 state 변경 제외하고 뭐든지 다 한다는 뜻
+	components 에선 dispatch 로 호출됨
+	
+	실제로는 다음과 같이 사용되는데,
+	
+	methods: {
+		changeMessage() {
+			const newMessage = this.inputData;
+			this.$store.dispatch('changeMessage', newMessage);
+		}
+	}
+
+	그러면, 이쪽이 호출된다.
+	mutations: {
+		CHANGE_MESSAGE(state, message) {
+			state.message = message;
+		}
+	},
+	actions: {
+		changeMessage(context, message) {
+			context.commit('CHANGE_MESSAGE', message);
+		}
+	}
+
+	즉, actions 에서 mutations 의 CHANGE_MESSAGE 사용해 데이터 변경
+	
